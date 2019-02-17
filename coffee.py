@@ -7,17 +7,17 @@ import boto.sqs
 import json
 from datetime import datetime, timedelta
 from time import sleep
-
+from gpiozero import LED, Button
 
 conn = boto.sqs.connect_to_region("us-east-1")
 q = conn.get_queue('smarthome-updates.fifo')
 
 
-#from gpiozero import LED, Button
+#
 #
 #from signal import pause
 
-#led = LED(17)
+led = LED(2)
 #
 #while True:
 #    led.on()
@@ -43,8 +43,10 @@ while 1:
 		print json.dumps(data)
 		if data['newState'] == 'ON':
 			print 'Turn the thing on'
+			led.on()
 		else:
 			print 'Turn the thing off'
+			led.off()
 		q.delete_message(message)
 	print 'Sleeping'
 	sleep(1)
